@@ -140,13 +140,14 @@ impl<F: PrimeField> UnnormalizedBivariateLagrangePoly<F> for EvaluationDomain<F>
 #[cfg(test)]
 mod tests {
     use super::*;
-    use algebra::bls12_381::fr::Fr;
+    //use algebra::bls12_381::fr::Fr;
+    use algebra::fields::FpCurv;
     use algebra::UniformRand;
 
     #[test]
     fn domain_unnormalized_bivariate_lagrange_poly() {
         for domain_size in 1..10 {
-            let domain = EvaluationDomain::<Fr>::new(1 << domain_size).unwrap();
+            let domain = EvaluationDomain::<FpCurv>::new(1 << domain_size).unwrap();
             let manual: Vec<_> = domain
                 .elements()
                 .map(|elem| domain.eval_unnormalized_bivariate_lagrange_poly(elem, elem))
@@ -160,8 +161,8 @@ mod tests {
     fn domain_unnormalized_bivariate_lagrange_poly_diff_inputs() {
         let rng = &mut algebra::test_rng();
         for domain_size in 1..10 {
-            let domain = EvaluationDomain::<Fr>::new(1 << domain_size).unwrap();
-            let x = Fr::rand(rng);
+            let domain = EvaluationDomain::<FpCurv>::new(1 << domain_size).unwrap();
+            let x = FpCurv::rand(rng);
             let manual: Vec<_> = domain
                 .elements()
                 .map(|y| domain.eval_unnormalized_bivariate_lagrange_poly(x, y))

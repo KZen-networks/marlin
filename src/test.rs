@@ -40,22 +40,31 @@ mod marlin {
     use crate::Marlin;
 
     use algebra::UniformRand;
-    use algebra::{Bls12_381, bls12_381::Fr};
+  //  use algebra::{Bls12_381, bls12_381::Fr};
+    use algebra::fields::FpCurv;
     use blake2::Blake2s;
-    use poly_commit::marlin_kzg10::MarlinKZG10;
+    use poly_commit::super_marlin::SuperMarlinPoly;
+  //  use poly_commit::marlin_kzg10::MarlinKZG10;
+
     use core::ops::MulAssign;
 
-    type MultiPC = MarlinKZG10<Bls12_381>;
-    type MarlinInst = Marlin<Fr, MultiPC, Blake2s>;
+   type MultiPC = SuperMarlinPoly;
+    //type MultiPC = MarlinKZG10<Bls12_381>;
+    type MarlinInst = Marlin<FpCurv, MultiPC, Blake2s>;
+   // type MarlinInst = Marlin<Fr, MultiPC, Blake2s>;
+
 
     fn test_circuit(num_constraints: usize, num_variables: usize) {
         let rng = &mut algebra::test_rng();
 
-        let universal_srs = MarlinInst::universal_setup(100, 25, 100, rng).unwrap();
+       // let universal_srs = MarlinInst::universal_setup(100, 25, 100, rng).unwrap();
+        let universal_srs = MarlinInst::universal_setup(num_constraints, num_variables, num_constraints, rng).unwrap();
 
-        for _ in 0..100 {
-            let a = Fr::rand(rng);
-            let b = Fr::rand(rng);
+        for _ in 0..1 {
+            let a = FpCurv::rand(rng);
+            let b = FpCurv::rand(rng);
+         //   let a = Fr::rand(rng);
+         //   let b = Fr::rand(rng);
             let mut c = a;
             c.mul_assign(&b);
 
@@ -70,7 +79,7 @@ mod marlin {
             assert!(MarlinInst::verify(&index_vk, &[c], &proof, rng).unwrap());
             println!("Called verifier");
             println!("\nShould not verify (i.e. verifier messages should print below):");
-            assert!(!MarlinInst::verify(&index_vk, &[a], &proof, rng).unwrap());
+            assert!(MarlinInst::verify(&index_vk, &[a], &proof, rng).is_err());
         }
 
     }
@@ -111,6 +120,14 @@ mod marlin {
     fn prove_and_verify_with_square_matrix() {
         let num_constraints = 25;
         let num_variables = 25;
+
+        test_circuit(num_constraints, num_variables);
+    }
+
+    #[test]
+    fn prove_and_verify_tiny() {
+        let num_constraints = 5;
+        let num_variables = 3;
 
         test_circuit(num_constraints, num_variables);
     }

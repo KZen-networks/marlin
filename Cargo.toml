@@ -19,12 +19,15 @@ license = "MIT/Apache-2.0"
 edition = "2018"
 
 [dependencies]
-algebra-core = { git = "https://github.com/scipr-lab/zexe/", default-features = false }
-ff-fft = { git = "https://github.com/scipr-lab/zexe/", default-features = false }
-bench-utils = { git = "https://github.com/scipr-lab/zexe/" }
-r1cs-core = { git = "https://github.com/scipr-lab/zexe/", default-features = false }
+algebra-core = { git = "https://github.com/KZen-networks/zexe/", default-features = false }
 
-poly-commit = { git = "https://github.com/scipr-lab/poly-commit", default-features = false }
+ff-fft = { git = "https://github.com/KZen-networks/zexe/", default-features = false }
+
+bench-utils = { git = "https://github.com/KZen-networks/zexe/" }
+r1cs-core = { git = "https://github.com/KZen-networks/zexe/", default-features = false }
+
+
+poly-commit = { git = "https://github.com/KZen-networks/poly-commit", default-features = false }
 
 rand_core = { version = "0.5" }
 rand_chacha = { version = "0.2.1", default-features = false }
@@ -35,7 +38,8 @@ derivative = { version = "1", features = ["use_core"] }
 
 [dev-dependencies]
 blake2 = { version = "0.8", default-features = false }
-algebra = { git = "https://github.com/scipr-lab/zexe/", default-features = false, features = ["bls12_381"] }
+algebra = { git = "https://github.com/KZen-networks/zexe/", default-features = false }
+#algebra = { git = "https://github.com/KZen-networks/zexe/", default-features = false,  features= ["bls12_381"] ,  branch = "fp_curv"}
 
 
 [profile.release]
@@ -51,7 +55,8 @@ incremental = true
 debug = true
 
 [features]
-default = [ "std", "parallel" ]
+#default = [ "std", "parallel" ]
+default = [ "std" ]
 std = [ "algebra-core/std", "ff-fft/std", "r1cs-core/std", "poly-commit/std" ]
 print-trace = [ "bench-utils/print-trace" ]
 parallel = [ "std", "algebra-core/parallel", "ff-fft/parallel", "poly-commit/parallel", "rayon" ]

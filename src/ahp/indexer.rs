@@ -14,7 +14,7 @@ use core::marker::PhantomData;
 /// variables, the number of constraints, and the maximum number of non-zero 
 /// entries in any of the constraint matrices.
 #[derive(Derivative)]
-#[derivative(Clone(bound = ""), Copy(bound = ""))]
+#[derivative(Clone(bound = ""), Copy(bound = ""), Debug)]
 pub struct IndexInfo<F, C> {
     /// The total number of variables in the constraint system.
     pub num_variables: usize,

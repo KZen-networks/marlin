@@ -2,6 +2,7 @@ use crate::Vec;
 use crate::ahp::indexer::*;
 use crate::ahp::prover::ProverMsg;
 use algebra_core::PrimeField;
+use algebra_core::Field;
 use poly_commit::PolynomialCommitment;
 use r1cs_core::ConstraintSynthesizer;
 use core::marker::PhantomData;
@@ -18,7 +19,7 @@ pub type UniversalSRS<F, PC> = <PC as PolynomialCommitment<F>>::UniversalParams;
 /* ************************************************************************* */
 
 /// Verification key for a specific index (i.e., R1CS matrices).
-pub struct IndexVerifierKey<F: PrimeField, PC: PolynomialCommitment<F>, C: ConstraintSynthesizer<F>> {
+pub struct IndexVerifierKey<F: Field, PC: PolynomialCommitment<F>, C: ConstraintSynthesizer<F>> {
     /// Stores information about the size of the index, as well as its field of
     /// definition.
     pub index_info: IndexInfo<F, C>,
@@ -29,6 +30,7 @@ pub struct IndexVerifierKey<F: PrimeField, PC: PolynomialCommitment<F>, C: Const
 }
 
 impl<F: PrimeField, PC: PolynomialCommitment<F>, C: ConstraintSynthesizer<F>> algebra_core::ToBytes for IndexVerifierKey<F, PC, C> {
+
     fn write<W: algebra_core::io::Write>(&self, mut w: W) -> algebra_core::io::Result<()> {
         self.index_info.write(&mut w)?;
         self.index_comms.write(&mut w)
@@ -87,7 +89,7 @@ where
 /* ************************************************************************* */
 
 /// A zkSNARK proof.
-pub struct Proof<F: PrimeField, PC: PolynomialCommitment<F>, C: ConstraintSynthesizer<F>> {
+pub struct Proof<F: Field, PC: PolynomialCommitment<F>, C: ConstraintSynthesizer<F>> {
     /// Commitments to the polynomials produced by the AHP prover.
     pub commitments: Vec<Vec<PC::Commitment>>,
     /// Evaluations of these polynomials.

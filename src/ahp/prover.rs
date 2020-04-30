@@ -82,6 +82,7 @@ impl<'a, 'b, F: PrimeField, C> ProverState<'a, 'b, F, C> {
 
 /// Each prover message that is not a list of oracles is a list of field elements.
 #[repr(transparent)]
+#[derive(Clone, Debug)]
 pub struct ProverMsg<F: Field> {
     /// The field elements that make up the message
     pub field_elements: Vec<F>,
@@ -557,8 +558,10 @@ impl<F: PrimeField> AHPForR1CS<F> {
             field_elements: Vec::new(),
         };
 
+
         assert!(g_1.degree() <= domain_h.size() - 2);
         assert!(h_1.degree() <= 2 * domain_h.size() + 2 * zk_bound - 2);
+
 
         let oracles = ProverSecondOracles {
             g_1: LabeledPolynomial::new_owned("g_1".to_string(), g_1, Some(domain_h.size() - 2), Some(1)),
